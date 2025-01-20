@@ -1,22 +1,42 @@
 public class FetchData
 {
-    public static User GetUser(string email)
+    public static Post GetPost(int id)
     {
         try
         {
             using var db = new AppContext();
-            var user = db.Users.FirstOrDefault(u => u.Email == email);
+            var post = db.Posts.FirstOrDefault(p => p.Id == id);
 
-            if (user == null)
+            if (post == null)
             {
-                throw new Exception("User not found");
+                throw new Exception("Post not found");
             }
 
-            return user;
+            return post;
         }
         catch (Exception)
         {
-            throw new Exception("Could not fetch user");
+            throw new Exception("Could not fetch post");
+        }
+    }
+
+    public static List<Post> GetAllPosts()
+    {
+        try
+        {
+            using var db = new AppContext();
+            var posts = db.Posts.ToList();
+
+            if (posts == null || posts.Count == 0)
+            {
+                throw new Exception("Posts not found");
+            }
+
+            return posts;
+        }
+        catch (Exception)
+        {
+            throw new Exception("Could not fetch posts");
         }
     }
 }

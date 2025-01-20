@@ -2,8 +2,9 @@ using Microsoft.EntityFrameworkCore;
 
 public class AppContext : DbContext
 {
-    public DbSet<User> Users { get; set; }
+    public DbSet<Post> Posts { get; set; }
 
+    // public DbSet<User> Users { get; set; }
     // public DbSet<Product> Products { get; set; }
     // public DbSet<Cart> Carts { get; set; }
     // public DbSet<ProductCart> ProductCarts { get; set; }
@@ -18,11 +19,17 @@ public class AppContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<User>(entity =>
+        modelBuilder.Entity<Post>(entity =>
         {
-            entity.HasKey(u => u.Email);
-            entity.Property(u => u.Email).HasColumnName("Email");
+            entity.HasKey(p => p.Id);
+            entity.Property(p => p.Id).HasColumnName("Id");
         });
+
+        // modelBuilder.Entity<User>(entity =>
+        // {
+        //     entity.HasKey(u => u.Email);
+        //     entity.Property(u => u.Email).HasColumnName("Email");
+        // });
 
         // modelBuilder.Entity<Product>(entity =>
         // {
