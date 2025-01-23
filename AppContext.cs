@@ -3,11 +3,9 @@ using Microsoft.EntityFrameworkCore;
 public class AppContext : DbContext
 {
     public DbSet<Post> Posts { get; set; }
-
-    // public DbSet<User> Users { get; set; }
-    // public DbSet<Product> Products { get; set; }
-    // public DbSet<Cart> Carts { get; set; }
-    // public DbSet<ProductCart> ProductCarts { get; set; }
+    public DbSet<SubReddit> SubReddits { get; set; }
+    public DbSet<User> Users { get; set; }
+    public DbSet<Comment> Comments { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -23,40 +21,38 @@ public class AppContext : DbContext
         {
             entity.HasKey(p => p.Id);
             entity.Property(p => p.Id).HasColumnName("Id");
+            entity.HasOne(p => p.User).WithMany(u => u.Posts);
+            entity.HasOne(p => p.SubReddit).WithMany(sr => sr.Posts);
+            entity.HasMany(p => p.Comments).WithOne(c => c.Post);
         });
 
-        // modelBuilder.Entity<User>(entity =>
-        // {
-        //     entity.HasKey(u => u.Email);
-        //     entity.Property(u => u.Email).HasColumnName("Email");
-        // });
+        modelBuilder.Entity<SubReddit>(entity =>
+        {
+            entity.HasKey(sr => sr.Name);
+            entity.Property(sr => sr.Name).HasColumnName("Name");
+            entity.HasMany(sr => sr.Posts).WithOne(p => p.SubReddit);
+            entity.HasMany(sr => sr.Users).WithMany(u => u.SubReddits);
+        });
 
-        // modelBuilder.Entity<Product>(entity =>
-        // {
-        //     entity.HasKey(p => p.Id);
-        //     entity.Property(p => p.Id).HasColumnName("Id");
-        // });
+        modelBuilder.Entity<User>(entity =>
+        {
+            entity.HasKey(u => u.Id);
+            entity.Property(u => u.Id).HasColumnName("Id");
+            entity.HasMany(u => u.Posts).WithOne(p => p.User);
+            entity.HasMany(u => u.SubReddits).WithMany(sr => sr.Users);
+            entity.HasMany(u => u.Comments).WithOne(c => c.User);
+        });
 
-        // modelBuilder.Entity<Cart>(entity =>
-        // {
-        //     entity.HasKey(c => c.Email);
-        //     entity.Property(c => c.Email).HasColumnName("Email");
-        //     entity.HasOne(c => c.User).WithMany(u => u.Carts).HasForeignKey(c => c.EmailFK);
-        // });
+        modelBuilder.Entity<Comment>(entity =>
+        {
+            entity.HasKey(c => c.Id);
+            entity.Property(c => c.Id).HasColumnName("Id");
+            entity.HasOne(c => c.User).WithMany(u => u.Comments);
+            entity.HasOne(c => c.Post).WithMany(p => p.Comments);
+        });
 
-        // modelBuilder.Entity<ProductCart>(entity =>
-        // {
-        //     entity.HasKey(pc => new { pc.CartEmail, pc.ProductId });
-        //     entity.Property(pc => pc.CartEmail).HasColumnName("CartEmail");
-        //     entity.Property(pc => pc.ProductId).HasColumnName("ProductId");
-        //     entity
-        //         .HasOne(pc => pc.Cart)
-        //         .WithMany(c => c.ProductCarts)
-        //         .HasForeignKey(pc => pc.CartEmail);
-        //     entity
-        //         .HasOne(pc => pc.Product)
-        //         .WithMany(p => p.ProductCarts)
-        //         .HasForeignKey(pc => pc.ProductId);
-        // });
+        // entity.HasOne(p => p.SubReddits).WithMany(sr => sr.Posts);
+        // entity.HasMany(p => p.SubReddits).WithMany(sr => sr.Posts);
+        // entity.HasMany(p => p.SubReddits).WithMany(sr => sr.Posts).HasForeignKey(p => p.SubReddit);
     }
 }

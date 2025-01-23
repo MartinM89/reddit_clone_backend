@@ -10,7 +10,7 @@ public class PostgresPostController : ControllerBase
     {
         try
         {
-            var post = FetchData.GetPost(id);
+            var post = FetchPostService.GetPost(id);
             return Ok(post);
         }
         catch (Exception ex)
@@ -25,7 +25,7 @@ public class PostgresPostController : ControllerBase
     {
         try
         {
-            var posts = FetchData.GetAllPosts();
+            var posts = FetchPostService.GetAllPosts();
             return Ok(posts);
         }
         catch (Exception ex)
@@ -34,13 +34,13 @@ public class PostgresPostController : ControllerBase
         }
     }
 
-    [HttpGet]
+    [HttpPost]
     [Route("addpost")]
     public IActionResult AddPost(string title)
     {
         try
         {
-            FetchData.AddPost(title);
+            FetchPostService.AddPost(title);
             return Ok(new { Message = "Post added" });
         }
         catch (Exception ex)
@@ -49,13 +49,13 @@ public class PostgresPostController : ControllerBase
         }
     }
 
-    [HttpGet]
+    [HttpDelete]
     [Route("deletepost")]
     public IActionResult DeletePost(int id)
     {
         try
         {
-            FetchData.DeletePost(id);
+            FetchPostService.DeletePost(id);
             return Ok(new { Message = "Post deleted" });
         }
         catch (Exception ex)
@@ -64,13 +64,13 @@ public class PostgresPostController : ControllerBase
         }
     }
 
-    [HttpGet]
+    [HttpPut]
     [Route("updatepost")]
-    public IActionResult UpdatePost(int id, string title)
+    public IActionResult UpdatePost(int id, string title, int likes, int dislikes)
     {
         try
         {
-            FetchData.UpdatePost(id, title);
+            FetchPostService.UpdatePost(id, title, likes, dislikes);
             return Ok(new { Message = "Post updated" });
         }
         catch (Exception ex)

@@ -6,46 +6,30 @@ public class Post
     public int Id { get; set; } = default!;
 
     [Required]
-    public int Rating { get; set; } = default!;
-
-    [Required]
     [MaxLength(100)]
     public string Title { get; set; } = default!;
 
     [Required]
-    [MaxLength(100)]
-    public string Submitted { get; set; } = default!;
+    public int Likes { get; set; } = default!;
+
+    [Required]
+    public int Dislikes { get; set; } = default!;
 
     [Required]
     [MaxLength(100)]
-    public string Username { get; set; } = default!;
+    public DateTime Date { get; set; } = default!;
 
-    [Required]
-    [MaxLength(100)]
-    public string SubReddit { get; set; } = default!;
+    public User User { get; set; } = default!;
+    public SubReddit SubReddit { get; set; } = default!;
+    public ICollection<Comment> Comments { get; set; } = new List<Comment>();
 
-    [Required]
-    public int CommentAmount { get; set; } = default!;
-
-    // public ICollection<Comment> Comments { get; set; } = new List<Comment>();
-
-    public Post(
-        int id,
-        int rating,
-        string title,
-        string submitted,
-        string username,
-        string subReddit,
-        int commentAmount
-    )
+    public Post(int likes, int dislikes, string title, DateTime date, SubReddit subReddit)
     {
-        Id = id;
-        Rating = rating;
+        Likes = likes;
+        Dislikes = dislikes;
         Title = title;
-        Submitted = submitted;
-        Username = username;
+        Date = date;
         SubReddit = subReddit;
-        CommentAmount = commentAmount;
     }
 
     // Empty constructor for EF

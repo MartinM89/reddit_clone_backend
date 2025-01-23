@@ -1,4 +1,4 @@
-public class FetchData
+public class FetchPostService
 {
     public static Post GetPost(int id)
     {
@@ -42,15 +42,35 @@ public class FetchData
 
     public static void AddPost(string title)
     {
-        Post post = new Post
-        {
-            Rating = 0,
-            Title = title,
-            Submitted = DateTime.Now.ToString(),
-            Username = "fresh_baker",
-            SubReddit = "r/programming",
-            CommentAmount = 5,
-        };
+        Post post =
+            new()
+            {
+                Title = title,
+                Likes = 10,
+                Dislikes = 5,
+                Date = DateTime.Now,
+                User = new User("fresh_baker"),
+                SubReddit = new SubReddit("r/programming"),
+                Comments =
+                [
+                    new()
+                    {
+                        Content = "This is a comment",
+                        Date = DateTime.Now,
+                        Likes = 5,
+                        Dislikes = 1,
+                        User = new User("fresh_baker"),
+                    },
+                    new()
+                    {
+                        Content = "This is another comment",
+                        Date = DateTime.Now,
+                        Likes = 3,
+                        Dislikes = 2,
+                        User = new User("fresh_baker"),
+                    },
+                ],
+            };
 
         try
         {
@@ -90,17 +110,17 @@ public class FetchData
     // db.Posts.Attach(post);
     // db.Posts.Remove(post);
 
-    public static void UpdatePost(int id, string title)
+    public static void UpdatePost(int id, string title, int likes, int dislikes)
     {
         Post post = new Post
         {
             Id = id,
-            Rating = 0,
+            Likes = likes,
+            Dislikes = dislikes,
             Title = title,
-            Submitted = DateTime.Now.ToString(),
-            Username = "fresh_baker",
-            SubReddit = "r/programming",
-            CommentAmount = 5,
+            Date = DateTime.Now,
+            User = new("fresh_baker"),
+            SubReddit = new("r/programming"),
         };
 
         try
