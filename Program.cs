@@ -1,3 +1,10 @@
+using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+
 public class Startup
 {
     public Startup(IConfiguration configuration)
@@ -18,7 +25,12 @@ public class Startup
             );
         });
 
-        services.AddControllers();
+        services
+            .AddControllers()
+            .AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
+            });
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

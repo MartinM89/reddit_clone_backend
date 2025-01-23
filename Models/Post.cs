@@ -10,6 +10,9 @@ public class Post
     public string Title { get; set; } = default!;
 
     [Required]
+    public string Content { get; set; } = default!;
+
+    [Required]
     public int Likes { get; set; } = default!;
 
     [Required]

@@ -1,3 +1,5 @@
+using Microsoft.EntityFrameworkCore;
+
 public class FetchPostService
 {
     public static Post GetPost(int id)
@@ -20,12 +22,28 @@ public class FetchPostService
         }
     }
 
-    public static List<Post> GetAllPosts()
+    public static List<PostDto> GetAllPosts()
     {
         try
         {
             using var db = new AppContext();
-            var posts = db.Posts.ToList();
+            var posts = db
+                .Posts.Include(p => p.Comments)
+                .Include(p => p.User)
+                .Include(p => p.SubReddit)
+                .Select(p => new PostDto
+                {
+                    Id = p.Id,
+                    Title = p.Title,
+                    Likes = p.Likes,
+                    Dislikes = p.Dislikes,
+                    Date = p.Date,
+                    Username = p.User.Username,
+                    SubRedditName = p.SubReddit.Name,
+                    CommentCount = p.Comments.Count,
+                    Content = p.Content,
+                })
+                .ToList();
 
             if (posts == null || posts.Count == 0)
             {
