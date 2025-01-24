@@ -78,9 +78,25 @@ public class PostgresPostController : ControllerBase
             return BadRequest(new { message = $"Couldn't update post. {ex.Message}" });
         }
     }
+
+    [HttpGet]
+    [Route("getsubreddits")]
+    public IActionResult GetSubreddits()
+    {
+        try
+        {
+            var subreddits = FetchPostService.GetSubreddits();
+            return Ok(subreddits);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { message = $"Couldn't get subreddits. {ex.Message}" });
+        }
+    }
 }
 
 // http://localhost:5049/api/postgrespost/getpost?id=1
 // http://localhost:5049/api/postgrespost/getallposts
 // http://localhost:5049/api/postgrespost/deletepost?id=1
 // http://localhost:5049/api/postgrespost/addpost?title=New_Post
+// http://localhost:5049/api/postgrespost/getsubreddits

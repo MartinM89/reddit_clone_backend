@@ -153,4 +153,24 @@ public class FetchPostService
             throw new Exception("Could not delete post");
         }
     }
+
+    public static List<SubReddit> GetSubreddits()
+    {
+        try
+        {
+            using var db = new AppContext();
+            var subreddits = db.SubReddits.ToList();
+
+            if (subreddits == null || subreddits.Count == 0)
+            {
+                throw new Exception("Subreddits not found");
+            }
+
+            return subreddits;
+        }
+        catch (Exception)
+        {
+            throw new Exception("Could not fetch subreddits");
+        }
+    }
 }
