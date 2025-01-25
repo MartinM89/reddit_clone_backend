@@ -36,11 +36,16 @@ public class PostgresPostController : ControllerBase
 
     [HttpPost]
     [Route("addpost")]
-    public IActionResult AddPost(string title)
+    public IActionResult AddPost([FromBody] PostData postData)
     {
         try
         {
-            FetchPostService.AddPost(title);
+            FetchPostService.AddPost(
+                postData.Title,
+                postData.UserName,
+                postData.SubRedditName,
+                postData.Content
+            );
             return Ok(new { Message = "Post added" });
         }
         catch (Exception ex)
@@ -98,5 +103,5 @@ public class PostgresPostController : ControllerBase
 // http://localhost:5049/api/postgrespost/getpost?id=1
 // http://localhost:5049/api/postgrespost/getallposts
 // http://localhost:5049/api/postgrespost/deletepost?id=1
-// http://localhost:5049/api/postgrespost/addpost?title=New_Post
+// http://localhost:5049/api/postgrespost/addpost
 // http://localhost:5049/api/postgrespost/getsubreddits

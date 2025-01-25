@@ -26,13 +26,13 @@ public class Post
     public SubReddit SubReddit { get; set; } = default!;
     public ICollection<Comment> Comments { get; set; } = new List<Comment>();
 
-    public Post(int likes, int dislikes, string title, DateTime date, SubReddit subReddit)
+    public Post(string title, DateTime date, SubReddit subReddit, string content, User user)
     {
-        Likes = likes;
-        Dislikes = dislikes;
         Title = title;
         Date = date;
         SubReddit = subReddit;
+        Content = content;
+        User = user;
     }
 
     // Empty constructor for EF

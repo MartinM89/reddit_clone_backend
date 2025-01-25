@@ -58,36 +58,18 @@ public class FetchPostService
         }
     }
 
-    public static void AddPost(string title)
+    public static void AddPost(string title, string userName, string subRedditName, string content)
     {
         Post post =
             new()
             {
                 Title = title,
-                Likes = 10,
-                Dislikes = 5,
+                Likes = 0,
+                Dislikes = 0,
                 Date = DateTime.Now,
-                User = new User("fresh_baker"),
-                SubReddit = new SubReddit("r/programming"),
-                Comments =
-                [
-                    new()
-                    {
-                        Content = "This is a comment",
-                        Date = DateTime.Now,
-                        Likes = 5,
-                        Dislikes = 1,
-                        User = new User("fresh_baker"),
-                    },
-                    new()
-                    {
-                        Content = "This is another comment",
-                        Date = DateTime.Now,
-                        Likes = 3,
-                        Dislikes = 2,
-                        User = new User("fresh_baker"),
-                    },
-                ],
+                User = new(userName),
+                SubReddit = new("r/" + subRedditName),
+                Content = content,
             };
 
         try
@@ -99,7 +81,7 @@ public class FetchPostService
         }
         catch (Exception)
         {
-            throw new Exception("Could not delete post");
+            throw new Exception("Could not add post");
         }
     }
 
@@ -150,7 +132,7 @@ public class FetchPostService
         }
         catch (Exception)
         {
-            throw new Exception("Could not delete post");
+            throw new Exception("Could not update post");
         }
     }
 
