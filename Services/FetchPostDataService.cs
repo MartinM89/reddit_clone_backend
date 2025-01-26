@@ -66,9 +66,9 @@ public class FetchPostService
                 Title = title,
                 Likes = 0,
                 Dislikes = 0,
-                Date = DateTime.Now,
+                Date = DateTime.UtcNow,
                 User = new(userName),
-                SubReddit = new("r/" + subRedditName),
+                SubReddit = new(subRedditName),
                 Content = content,
             };
 
@@ -76,12 +76,21 @@ public class FetchPostService
         {
             using var db = new AppContext();
 
+            Console.WriteLine("Adding post to the database");
+
             db.Posts.Add(post);
             db.SaveChanges();
+
+            Console.WriteLine("Post saved to the database successfully");
         }
-        catch (Exception)
+        catch (Exception ex)
         {
-            throw new Exception("Could not add post");
+            Console.WriteLine($"Error saving post to the database: {ex.Message}");
+            if (ex.InnerException != null)
+            {
+                Console.WriteLine($"Inner exception: {ex.InnerException.Message}");
+            }
+            throw new Exception("Could not add post", ex);
         }
     }
 

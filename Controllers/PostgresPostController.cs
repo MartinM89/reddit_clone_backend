@@ -40,16 +40,26 @@ public class PostgresPostController : ControllerBase
     {
         try
         {
+            Console.WriteLine(
+                $"Received post data: Title={postData.Title}, UserName={postData.UserName}, SubRedditName={postData.SubRedditName}, Content={postData.Content}"
+            );
+
+            Console.WriteLine("Calling FetchPostService.AddPost");
+
             FetchPostService.AddPost(
                 postData.Title,
                 postData.UserName,
                 postData.SubRedditName,
                 postData.Content
             );
+
+            Console.WriteLine("Post added successfully");
+
             return Ok(new { Message = "Post added" });
         }
         catch (Exception ex)
         {
+            Console.WriteLine($"Error adding post: {ex.Message}");
             return BadRequest(new { message = $"Couldn't add post. {ex.Message}" });
         }
     }
