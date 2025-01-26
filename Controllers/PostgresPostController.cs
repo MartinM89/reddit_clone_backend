@@ -40,12 +40,6 @@ public class PostgresPostController : ControllerBase
     {
         try
         {
-            Console.WriteLine(
-                $"Received post data: Title={postData.Title}, UserName={postData.UserName}, SubRedditName={postData.SubRedditName}, Content={postData.Content}"
-            );
-
-            Console.WriteLine("Calling FetchPostService.AddPost");
-
             FetchPostService.AddPost(
                 postData.Title,
                 postData.UserName,
@@ -53,13 +47,10 @@ public class PostgresPostController : ControllerBase
                 postData.Content
             );
 
-            Console.WriteLine("Post added successfully");
-
             return Ok(new { Message = "Post added" });
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Error adding post: {ex.Message}");
             return BadRequest(new { message = $"Couldn't add post. {ex.Message}" });
         }
     }
@@ -108,6 +99,21 @@ public class PostgresPostController : ControllerBase
             return BadRequest(new { message = $"Couldn't get subreddits. {ex.Message}" });
         }
     }
+
+    [HttpGet]
+    [Route("getusers")]
+    public IActionResult GetUsers()
+    {
+        try
+        {
+            var users = FetchPostService.GetUsers();
+            return Ok(users);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { message = $"Couldn't get users. {ex.Message}" });
+        }
+    }
 }
 
 // http://localhost:5049/api/postgrespost/getpost?id=1
@@ -115,3 +121,4 @@ public class PostgresPostController : ControllerBase
 // http://localhost:5049/api/postgrespost/deletepost?id=1
 // http://localhost:5049/api/postgrespost/addpost
 // http://localhost:5049/api/postgrespost/getsubreddits
+// http://localhost:5049/api/postgrespost/getusers

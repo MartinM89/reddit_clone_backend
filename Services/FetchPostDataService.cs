@@ -60,35 +60,48 @@ public class FetchPostService
 
     public static void AddPost(string title, string userName, string subRedditName, string content)
     {
-        Post post =
-            new()
-            {
-                Title = title,
-                Likes = 0,
-                Dislikes = 0,
-                Date = DateTime.UtcNow,
-                User = new(userName),
-                SubReddit = new(subRedditName),
-                Content = content,
-            };
-
         try
         {
-            using var db = new AppContext();
+            using AppContext db = new();
 
-            Console.WriteLine("Adding post to the database");
+            User? user = db.Users.FirstOrDefault(u => u.Username == userName);
+
+            if (user == null)
+            {
+                throw new Exception("User not found");
+            }
+
+            db.Attach(user);
+
+            SubReddit? subReddit = db.SubReddits.FirstOrDefault(sr => sr.Name == subRedditName);
+
+            if (subReddit == null)
+            {
+                throw new Exception("Subreddit not found");
+            }
+
+            db.Attach(subReddit);
+
+            Post post =
+                new()
+                {
+                    Title = title,
+                    Likes = 0,
+                    Dislikes = 0,
+                    Date = DateTime.UtcNow,
+                    User = user,
+                    SubReddit = subReddit,
+                    Content = content,
+                };
 
             db.Posts.Add(post);
             db.SaveChanges();
-
-            Console.WriteLine("Post saved to the database successfully");
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Error saving post to the database: {ex.Message}");
             if (ex.InnerException != null)
             {
-                Console.WriteLine($"Inner exception: {ex.InnerException.Message}");
+                throw new Exception("Could not add post", ex.InnerException);
             }
             throw new Exception("Could not add post", ex);
         }
@@ -162,6 +175,26 @@ public class FetchPostService
         catch (Exception)
         {
             throw new Exception("Could not fetch subreddits");
+        }
+    }
+
+    public static List<User> GetUsers()
+    {
+        try
+        {
+            using var db = new AppContext();
+            var users = db.Users.ToList();
+
+            if (users == null || users.Count == 0)
+            {
+                throw new Exception("Users not found");
+            }
+
+            return users;
+        }
+        catch (Exception)
+        {
+            throw new Exception("Could not fetch users");
         }
     }
 }
