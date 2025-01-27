@@ -114,11 +114,32 @@ public class PostgresPostController : ControllerBase
             return BadRequest(new { message = $"Couldn't get users. {ex.Message}" });
         }
     }
+
+    [HttpPost]
+    [Route("addcomment")]
+    public IActionResult AddComment([FromBody] CommentDataDto commentData)
+    {
+        try
+        {
+            FetchPostService.AddComment(
+                commentData.UserName,
+                commentData.Content,
+                commentData.PostId
+            );
+
+            return Ok(new { Message = "Comment added" });
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { message = $"Couldn't add comment. {ex.Message}" });
+        }
+    }
 }
 
-// http://localhost:5049/api/postgrespost/getpost?id=1
+// http://localhost:5049/api/postgrespost/getpost?id=51
 // http://localhost:5049/api/postgrespost/getallposts
 // http://localhost:5049/api/postgrespost/deletepost?id=1
 // http://localhost:5049/api/postgrespost/addpost
 // http://localhost:5049/api/postgrespost/getsubreddits
 // http://localhost:5049/api/postgrespost/getusers
+// http://localhost:5049/api/postgrespost/addcomment

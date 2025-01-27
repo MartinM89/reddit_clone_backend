@@ -2,12 +2,38 @@ using Microsoft.EntityFrameworkCore;
 
 public class FetchPostService
 {
-    public static Post GetPost(int id)
+    public static PostAndCommentDto GetPost(int id)
     {
         try
         {
             using var db = new AppContext();
-            var post = db.Posts.FirstOrDefault(p => p.Id == id);
+            var post = db
+                .Posts.Include(p => p.Comments)
+                .ThenInclude(c => c.User)
+                .Include(p => p.User)
+                .Include(p => p.SubReddit)
+                .Select(p => new PostAndCommentDto
+                {
+                    Id = p.Id,
+                    Title = p.Title,
+                    UserName = p.User.Username,
+                    Date = p.Date,
+                    SubRedditName = p.SubReddit.Name,
+                    Content = p.Content,
+                    Likes = p.Likes,
+                    Dislikes = p.Dislikes,
+                    Comments = p
+                        .Comments.Select(c => new CommentDto
+                        {
+                            UserName = c.User.Username,
+                            Content = c.Content,
+                            Date = c.Date,
+                            Likes = c.Likes,
+                            Dislikes = c.Dislikes,
+                        })
+                        .ToList(),
+                })
+                .FirstOrDefault(p => p.Id == id);
 
             if (post == null)
             {
@@ -16,8 +42,13 @@ public class FetchPostService
 
             return post;
         }
-        catch (Exception)
+        catch (Exception ex)
         {
+            Console.WriteLine($"Error fetching post: {ex.Message}");
+            if (ex.InnerException != null)
+            {
+                Console.WriteLine($"Inner exception: {ex.InnerException.Message}");
+            }
             throw new Exception("Could not fetch post");
         }
     }
@@ -195,6 +226,51 @@ public class FetchPostService
         catch (Exception)
         {
             throw new Exception("Could not fetch users");
+        }
+    }
+
+    public static void AddComment(string userName, string content, string postId)
+    {
+        try
+        {
+            using AppContext db = new();
+
+            User? user = db.Users.FirstOrDefault(u => u.Username == userName);
+
+            if (user == null)
+            {
+                throw new Exception("User not found");
+            }
+
+            db.Attach(user);
+
+            Post? post = db.Posts.FirstOrDefault(p => p.Id == int.Parse(postId));
+
+            if (post == null)
+            {
+                throw new Exception("Post not found");
+            }
+
+            Comment comment = new Comment
+            {
+                Content = content,
+                Date = DateTime.UtcNow,
+                Likes = 0,
+                Dislikes = 0,
+                User = user,
+                Post = post,
+            };
+
+            db.Comments.Add(comment);
+            db.SaveChanges();
+        }
+        catch (Exception ex)
+        {
+            if (ex.InnerException != null)
+            {
+                throw new Exception("Could not add post", ex.InnerException);
+            }
+            throw new Exception("Could not add post", ex);
         }
     }
 }

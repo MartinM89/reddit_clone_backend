@@ -21,12 +21,14 @@ public class Comment
     public Post Post { get; set; } = default!;
     public User User { get; set; } = default!;
 
-    public Comment(string content, DateTime date, int likes, int dislikes)
+    public Comment(string content, DateTime date, int likes, int dislikes, Post post, User user)
     {
         Content = content;
         Date = date;
         Likes = likes;
         Dislikes = dislikes;
+        Post = post;
+        User = user;
     }
 
     // Empty constructor for EF
