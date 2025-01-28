@@ -134,6 +134,24 @@ public class PostgresPostController : ControllerBase
             return BadRequest(new { message = $"Couldn't add comment. {ex.Message}" });
         }
     }
+
+    [HttpPost]
+    [Route("likepost")]
+    public IActionResult LikePost(PostIdDto postIdDto)
+    {
+        try
+        {
+            FetchPostService.LikePost(postIdDto.PostId);
+
+            return Ok(new { message = "Post liked" });
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { message = $"Couldn't like post. {ex.Message}" });
+
+            throw;
+        }
+    }
 }
 
 // http://localhost:5049/api/postgrespost/getpost?id=51
@@ -143,3 +161,4 @@ public class PostgresPostController : ControllerBase
 // http://localhost:5049/api/postgrespost/getsubreddits
 // http://localhost:5049/api/postgrespost/getusers
 // http://localhost:5049/api/postgrespost/addcomment
+// http://localhost:5049/api/postgrespost/likepost

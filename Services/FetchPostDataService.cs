@@ -102,7 +102,7 @@ public class FetchPostService
                 throw new Exception("User not found");
             }
 
-            db.Attach(user);
+            // db.Attach(user);
 
             SubReddit? subReddit = db.SubReddits.FirstOrDefault(sr => sr.Name == subRedditName);
 
@@ -111,7 +111,7 @@ public class FetchPostService
                 throw new Exception("Subreddit not found");
             }
 
-            db.Attach(subReddit);
+            // db.Attach(subReddit);
 
             Post post =
                 new()
@@ -271,6 +271,31 @@ public class FetchPostService
                 throw new Exception("Could not add post", ex.InnerException);
             }
             throw new Exception("Could not add post", ex);
+        }
+    }
+
+    public static void LikePost(int postId)
+    {
+        try
+        {
+            using AppContext db = new();
+
+            Post? post = db.Posts.FirstOrDefault(p => p.Id == postId);
+
+            if (post == null)
+            {
+                throw new Exception("Post not found");
+            }
+
+            //db.Attach(post);
+
+            post.Likes += 1;
+
+            db.SaveChanges();
+        }
+        catch (Exception ex)
+        {
+            throw new Exception("Could not like post", ex);
         }
     }
 }
