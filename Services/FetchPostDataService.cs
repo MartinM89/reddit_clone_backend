@@ -1,3 +1,4 @@
+using System.IO.Pipes;
 using Microsoft.EntityFrameworkCore;
 
 public class FetchPostService
@@ -291,7 +292,13 @@ public class FetchPostService
                 throw new Exception("Post not found");
             }
 
-            if (post.IsLiked == false)
+            if (post.IsLiked == false && post.IsDisliked == true)
+            {
+                post.Likes += 2;
+                post.IsLiked = true;
+                post.IsDisliked = false;
+            }
+            else if (post.IsLiked == false)
             {
                 post.Likes += 1;
                 post.IsLiked = true;
@@ -324,7 +331,13 @@ public class FetchPostService
                 throw new Exception("Post not found");
             }
 
-            if (post.IsDisliked == false)
+            if (post.IsDisliked == false && post.IsLiked == true)
+            {
+                post.Likes -= 2;
+                post.IsLiked = false;
+                post.IsDisliked = true;
+            }
+            else if (post.IsDisliked == false)
             {
                 post.Likes -= 1;
                 post.IsLiked = false;
@@ -357,7 +370,13 @@ public class FetchPostService
                 throw new Exception("Post not found");
             }
 
-            if (comment.IsLiked == false)
+            if (comment.IsLiked == false && comment.IsDisliked == true)
+            {
+                comment.Likes += 2;
+                comment.IsLiked = true;
+                comment.IsDisliked = false;
+            }
+            else if (comment.IsLiked == false)
             {
                 comment.Likes += 1;
                 comment.IsLiked = true;
@@ -390,7 +409,13 @@ public class FetchPostService
                 throw new Exception("Post not found");
             }
 
-            if (comment.IsDisliked == false)
+            if (comment.IsDisliked == false && comment.IsLiked == true)
+            {
+                comment.Likes -= 2;
+                comment.IsLiked = false;
+                comment.IsDisliked = true;
+            }
+            else if (comment.IsDisliked == false)
             {
                 comment.Likes -= 1;
                 comment.IsLiked = false;
