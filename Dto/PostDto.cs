@@ -9,4 +9,6 @@ public class PostDto
     public string SubRedditName { get; set; } = default!;
     public int CommentCount { get; set; }
     public string Content { get; set; } = default!;
+    public bool IsLiked { get; set; }
+    public bool IsDisliked { get; set; }
 }

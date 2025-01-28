@@ -8,6 +8,8 @@ public class PostAndCommentDto
     public string Content { get; set; } = default!;
     public int Likes { get; set; } = default!;
     public int Dislikes { get; set; } = default!;
+    public bool IsLiked { get; set; }
+    public bool IsDisliked { get; set; }
     public ICollection<CommentDto> Comments { get; set; } = new List<CommentDto>();
 }
 
@@ -18,4 +20,6 @@ public class CommentDto
     public DateTime Date { get; set; }
     public int Likes { get; set; } = default!;
     public int Dislikes { get; set; } = default!;
+    public bool IsLiked { get; set; }
+    public bool IsDisliked { get; set; }
 }

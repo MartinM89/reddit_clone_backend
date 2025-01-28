@@ -18,6 +18,9 @@ public class Comment
     [Required]
     public int Dislikes { get; set; } = default!;
 
+    public bool IsLiked { get; set; } = default!;
+    public bool IsDisliked { get; set; } = default!;
+
     public Post Post { get; set; } = default!;
     public User User { get; set; } = default!;
 

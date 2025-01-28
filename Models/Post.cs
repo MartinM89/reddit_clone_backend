@@ -18,6 +18,10 @@ public class Post
     [Required]
     public int Dislikes { get; set; } = default!;
 
+    public bool IsLiked { get; set; } = default!;
+
+    public bool IsDisliked { get; set; } = default!;
+
     [Required]
     [MaxLength(100)]
     public DateTime Date { get; set; } = default!;

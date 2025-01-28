@@ -22,6 +22,8 @@ public class FetchPostService
                     Content = p.Content,
                     Likes = p.Likes,
                     Dislikes = p.Dislikes,
+                    IsLiked = p.IsLiked,
+                    IsDisliked = p.IsDisliked,
                     Comments = p
                         .Comments.Select(c => new CommentDto
                         {
@@ -30,6 +32,8 @@ public class FetchPostService
                             Date = c.Date,
                             Likes = c.Likes,
                             Dislikes = c.Dislikes,
+                            IsLiked = c.IsLiked,
+                            IsDisliked = c.IsDisliked,
                         })
                         .ToList(),
                 })
@@ -68,6 +72,8 @@ public class FetchPostService
                     Title = p.Title,
                     Likes = p.Likes,
                     Dislikes = p.Dislikes,
+                    IsLiked = p.IsLiked,
+                    IsDisliked = p.IsDisliked,
                     Date = p.Date,
                     Username = p.User.Username,
                     SubRedditName = p.SubReddit.Name,
@@ -138,6 +144,7 @@ public class FetchPostService
         }
     }
 
+    // Not used in the website
     public static void DeletePost(int id)
     {
         try
@@ -159,6 +166,7 @@ public class FetchPostService
         }
     }
 
+    // Not used in the website
     public static void UpdatePost(int id, string title, int likes, int dislikes)
     {
         Post post = new Post
@@ -283,7 +291,17 @@ public class FetchPostService
                 throw new Exception("Post not found");
             }
 
-            post.Likes += 1;
+            if (post.IsLiked == false)
+            {
+                post.Likes += 1;
+                post.IsLiked = true;
+                post.IsDisliked = false;
+            }
+            else
+            {
+                post.Likes -= 1;
+                post.IsLiked = false;
+            }
 
             db.SaveChanges();
         }
@@ -306,7 +324,17 @@ public class FetchPostService
                 throw new Exception("Post not found");
             }
 
-            post.Likes -= 1;
+            if (post.IsDisliked == false)
+            {
+                post.Likes -= 1;
+                post.IsLiked = false;
+                post.IsDisliked = true;
+            }
+            else
+            {
+                post.Likes += 1;
+                post.IsDisliked = false;
+            }
 
             db.SaveChanges();
         }
@@ -329,7 +357,17 @@ public class FetchPostService
                 throw new Exception("Post not found");
             }
 
-            comment.Likes += 1;
+            if (comment.IsLiked == false)
+            {
+                comment.Likes += 1;
+                comment.IsLiked = true;
+                comment.IsDisliked = false;
+            }
+            else
+            {
+                comment.Likes -= 1;
+                comment.IsLiked = false;
+            }
 
             db.SaveChanges();
         }
@@ -352,7 +390,17 @@ public class FetchPostService
                 throw new Exception("Post not found");
             }
 
-            comment.Likes -= 1;
+            if (comment.IsDisliked == false)
+            {
+                comment.Likes -= 1;
+                comment.IsLiked = false;
+                comment.IsDisliked = true;
+            }
+            else
+            {
+                comment.Likes += 1;
+                comment.IsDisliked = false;
+            }
 
             db.SaveChanges();
         }
