@@ -137,17 +137,71 @@ public class PostgresPostController : ControllerBase
 
     [HttpPost]
     [Route("likepost")]
-    public IActionResult LikePost(PostIdDto postIdDto)
+    public IActionResult LikePost(PostOrCommentIdDto postId)
     {
         try
         {
-            FetchPostService.LikePost(postIdDto.PostId);
+            FetchPostService.LikePost(postId);
 
             return Ok(new { message = "Post liked" });
         }
         catch (Exception ex)
         {
             return BadRequest(new { message = $"Couldn't like post. {ex.Message}" });
+
+            throw;
+        }
+    }
+
+    [HttpPost]
+    [Route("dislikepost")]
+    public IActionResult DislikePost(PostOrCommentIdDto postId)
+    {
+        try
+        {
+            FetchPostService.DislikePost(postId);
+
+            return Ok(new { message = "Post disliked" });
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { message = $"Couldn't dislike post. {ex.Message}" });
+
+            throw;
+        }
+    }
+
+    [HttpPost]
+    [Route("likecomment")]
+    public IActionResult LikeComment(PostOrCommentIdDto commentId)
+    {
+        try
+        {
+            FetchPostService.LikePost(commentId);
+
+            return Ok(new { message = "Comment liked" });
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { message = $"Couldn't like comment. {ex.Message}" });
+
+            throw;
+        }
+    }
+
+    [HttpPost]
+    [Route("dislikecomment")]
+    public IActionResult DislikeComment(PostOrCommentIdDto commentId)
+    {
+        try
+        {
+            FetchPostService.DislikePost(commentId);
+
+            return Ok(new { message = "Comment disliked" });
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { message = $"Couldn't dislike comment. {ex.Message}" });
 
             throw;
         }

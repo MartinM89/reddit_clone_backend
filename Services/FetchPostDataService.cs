@@ -159,10 +159,6 @@ public class FetchPostService
         }
     }
 
-    // var post = new Post { Id = id };
-    // db.Posts.Attach(post);
-    // db.Posts.Remove(post);
-
     public static void UpdatePost(int id, string title, int likes, int dislikes)
     {
         Post post = new Post
@@ -274,20 +270,18 @@ public class FetchPostService
         }
     }
 
-    public static void LikePost(int postId)
+    public static void LikePost(PostOrCommentIdDto postId)
     {
         try
         {
             using AppContext db = new();
 
-            Post? post = db.Posts.FirstOrDefault(p => p.Id == postId);
+            Post? post = db.Posts.FirstOrDefault(p => p.Id == postId.PostOrCommentId);
 
             if (post == null)
             {
                 throw new Exception("Post not found");
             }
-
-            //db.Attach(post);
 
             post.Likes += 1;
 
@@ -296,6 +290,75 @@ public class FetchPostService
         catch (Exception ex)
         {
             throw new Exception("Could not like post", ex);
+        }
+    }
+
+    public static void DislikePost(PostOrCommentIdDto postId)
+    {
+        try
+        {
+            using AppContext db = new();
+
+            Post? post = db.Posts.FirstOrDefault(p => p.Id == postId.PostOrCommentId);
+
+            if (post == null)
+            {
+                throw new Exception("Post not found");
+            }
+
+            post.Likes -= 1;
+
+            db.SaveChanges();
+        }
+        catch (Exception ex)
+        {
+            throw new Exception("Could not dislike post", ex);
+        }
+    }
+
+    public static void LikeComment(PostOrCommentIdDto commentId)
+    {
+        try
+        {
+            using AppContext db = new();
+
+            Comment? comment = db.Comments.FirstOrDefault(p => p.Id == commentId.PostOrCommentId);
+
+            if (comment == null)
+            {
+                throw new Exception("Post not found");
+            }
+
+            comment.Likes += 1;
+
+            db.SaveChanges();
+        }
+        catch (Exception ex)
+        {
+            throw new Exception("Could not like post", ex);
+        }
+    }
+
+    public static void DislikeComment(PostOrCommentIdDto commentId)
+    {
+        try
+        {
+            using AppContext db = new();
+
+            Comment? comment = db.Comments.FirstOrDefault(p => p.Id == commentId.PostOrCommentId);
+
+            if (comment == null)
+            {
+                throw new Exception("Post not found");
+            }
+
+            comment.Likes -= 1;
+
+            db.SaveChanges();
+        }
+        catch (Exception ex)
+        {
+            throw new Exception("Could not dislike post", ex);
         }
     }
 }
