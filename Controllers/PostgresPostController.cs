@@ -207,12 +207,3 @@ public class PostgresPostController : ControllerBase
         }
     }
 }
-
-// http://localhost:5049/api/postgrespost/getpost?id=51
-// http://localhost:5049/api/postgrespost/getallposts
-// http://localhost:5049/api/postgrespost/deletepost?id=1
-// http://localhost:5049/api/postgrespost/addpost
-// http://localhost:5049/api/postgrespost/getsubreddits
-// http://localhost:5049/api/postgrespost/getusers
-// http://localhost:5049/api/postgrespost/addcomment
-// http://localhost:5049/api/postgrespost/likepost

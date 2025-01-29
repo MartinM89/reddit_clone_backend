@@ -50,9 +50,5 @@ public class AppContext : DbContext
             entity.HasOne(c => c.User).WithMany(u => u.Comments);
             entity.HasOne(c => c.Post).WithMany(p => p.Comments);
         });
-
-        // entity.HasOne(p => p.SubReddits).WithMany(sr => sr.Posts);
-        // entity.HasMany(p => p.SubReddits).WithMany(sr => sr.Posts);
-        // entity.HasMany(p => p.SubReddits).WithMany(sr => sr.Posts).HasForeignKey(p => p.SubReddit);
     }
 }

@@ -1,9 +1,4 @@
 using System.Text.Json.Serialization;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 
 public class Startup
 {
@@ -42,7 +37,6 @@ public class Startup
 
         app.UseRouting();
 
-        // Ensure UseCors is called after UseRouting and before UseAuthorization
         app.UseCors("AllowSpecificOrigin");
 
         app.UseAuthorization();

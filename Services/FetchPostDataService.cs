@@ -1,4 +1,3 @@
-using System.IO.Pipes;
 using Microsoft.EntityFrameworkCore;
 
 public class FetchPostService
@@ -50,10 +49,9 @@ public class FetchPostService
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Error fetching post: {ex.Message}");
             if (ex.InnerException != null)
             {
-                Console.WriteLine($"Inner exception: {ex.InnerException.Message}");
+                throw new Exception($"Inner exception: {ex.InnerException.Message}");
             }
             throw new Exception("Could not fetch post");
         }
