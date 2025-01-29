@@ -363,7 +363,7 @@ public class FetchPostService
         {
             using AppContext db = new();
 
-            Comment? comment = db.Comments.FirstOrDefault(p => p.Id == commentId.PostOrCommentId);
+            Comment? comment = db.Comments.FirstOrDefault(c => c.Id == commentId.PostOrCommentId);
 
             if (comment == null)
             {
@@ -402,7 +402,7 @@ public class FetchPostService
         {
             using AppContext db = new();
 
-            Comment? comment = db.Comments.FirstOrDefault(p => p.Id == commentId.PostOrCommentId);
+            Comment? comment = db.Comments.FirstOrDefault(c => c.Id == commentId.PostOrCommentId);
 
             if (comment == null)
             {
