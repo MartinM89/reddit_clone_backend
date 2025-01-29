@@ -28,6 +28,7 @@ public class FetchPostService
                     Comments = p
                         .Comments.Select(c => new CommentDto
                         {
+                            Id = c.Id,
                             UserName = c.User.Username,
                             Content = c.Content,
                             Date = c.Date,

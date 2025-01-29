@@ -177,7 +177,7 @@ public class PostgresPostController : ControllerBase
     {
         try
         {
-            FetchPostService.LikePost(commentId);
+            FetchPostService.LikeComment(commentId);
 
             return Ok(new { message = "Comment liked" });
         }
@@ -195,7 +195,7 @@ public class PostgresPostController : ControllerBase
     {
         try
         {
-            FetchPostService.DislikePost(commentId);
+            FetchPostService.DislikeComment(commentId);
 
             return Ok(new { message = "Comment disliked" });
         }
